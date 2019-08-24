@@ -27,8 +27,14 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   dynamic _valueFromServer = 0;
 
-  Future<void> _getResultFromServer() {
-    var res = azureFunction("TriggerTest");
+  void _getResultFromServer() async {
+    String res = await azureFunction("TriggerTest", body: {'chave': 'numero'});
+    if(res.isEmpty) {
+      setState((){
+        _valueFromServer = -1;
+      });
+      return;
+    }
     setState(() {
       _valueFromServer = res;
     });
